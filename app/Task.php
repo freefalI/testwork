@@ -11,4 +11,8 @@ class Task extends Model
     public function board(){
         return $this->belongsTo(Board::class);
     }
+    public function labels()
+    {
+        return $this->belongsToMany('App\Label');
+    }
 }

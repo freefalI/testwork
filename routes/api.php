@@ -31,3 +31,7 @@ Route::middleware('auth:sanctum')->post('/logout', 'LoginController@logout')->na
 Route::middleware('auth:sanctum')->apiResource('board', 'BoardController');
 Route::middleware('auth:sanctum')->apiResource('task', 'TaskController')->except('index');
 Route::middleware('auth:sanctum')->get('board/{board}/tasks', 'TaskController@taskList');
+
+Route::middleware('auth:sanctum')->apiResource('label', 'LabelController');
+Route::middleware('auth:sanctum')->post('task/{task}/attach_label/{label}/', 'TaskController@attachLabel');
+

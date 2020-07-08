@@ -6,7 +6,7 @@ use App\Task;
 use App\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class TaskPolicy
+class LabelPolicy
 {
     use HandlesAuthorization;
 
@@ -20,9 +20,11 @@ class TaskPolicy
         //
     }
 
+
     public function view(User $user, Task $task)
     {
-        return $user->id == $task->board->owner_id;
+        return true;
+
     }
 
     public function create(User $user)
@@ -32,15 +34,12 @@ class TaskPolicy
 
     public function update(User $user, Task $task)
     {
-        return $user->id == $task->board()->owner_id;
+        return true;
     }
 
     public function delete(User $user, Task $task)
     {
-        return $user->id == $task->board()->owner_id;
+        return true;
     }
-    public function attachLabel(User $user, Task $task)
-    {
-        return $user->id == $task->board()->owner_id;
-    }
+
 }

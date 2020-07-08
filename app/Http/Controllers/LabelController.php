@@ -2,13 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\Board;
 use App\Label;
 use App\Task;
 use Illuminate\Http\Request;
 
-class TaskController extends Controller
+class LabelController extends Controller
 {
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
+        return  Label::all();
+    }
 
     /**
      * Store a newly created resource in storage.
@@ -18,15 +26,13 @@ class TaskController extends Controller
      */
     public function store(Request $request)
     {
-        $this->authorize('create',Task::class);
+        $this->authorize('create',Label::class);
 
         $data = $request->validate([
             'title' => 'required|max:60',
-            'status_id' => 'required|numeric',
-            'board_id' => 'required|numeric',
         ]);
 
-        return Task::create($data);
+        return Label::create($data);
     }
 
     /**
@@ -37,10 +43,10 @@ class TaskController extends Controller
      */
     public function show($id)
     {
-        $task =Task::findOrFail($id);
-        $this->authorize('view',$task);
+        $label =Label::findOrFail($id);
+        $this->authorize('view',$label);
 
-        return $task;
+        return $label;
     }
 
     /**
@@ -52,11 +58,11 @@ class TaskController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $task = Task::findOrFail($id);
+        $label = Label::findOrFail($id);
 
-        $this->authorize('update',$task);
+        $this->authorize('update',$label);
 
-        $task->update($request->all());
+        $label->update($request->all());
         return  response(['message'=>'updated']);
 
     }
@@ -69,17 +75,9 @@ class TaskController extends Controller
      */
     public function destroy($id)
     {
-        $this->authorize('delete',Task::findOrFail($id));
+        $this->authorize('delete',Label::findOrFail($id));
 
-        Board::destroy($id);
+        Label::destroy($id);
         return  response(['message'=>'deleted']);
     }
-    public function attachLabel(Task $task, Label $label)
-    {
-        $this->authorize('attachLabel',$task);
-        $label->tasks()->attach($task->id);
-        return  response(['message'=>'attached']);
-    }
-
-
 }
