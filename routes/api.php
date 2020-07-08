@@ -35,3 +35,4 @@ Route::middleware('auth:sanctum')->get('board/{board}/tasks', 'TaskController@ta
 Route::middleware('auth:sanctum')->apiResource('label', 'LabelController');
 Route::middleware('auth:sanctum')->post('task/{task}/attach_label/{label}/', 'TaskController@attachLabel');
 
+Route::middleware('auth:sanctum')->apiResource('status', 'StatusController');
