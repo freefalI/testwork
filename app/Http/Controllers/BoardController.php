@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Board;
-use App\Station;
+use App\Http\Resources\Task as TaskResource;
 use App\Task;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -99,7 +99,7 @@ class BoardController extends Controller
         if ($request->has('status')) {
             $query = $query->where('status_id', $request->get('status'));
         }
-        return $query->get();
+        return TaskResource::collection($query->get()->paginate(10));
     }
 
 }
