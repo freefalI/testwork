@@ -29,12 +29,12 @@ class BoardController extends Controller
     {
         $this->authorize('create',Board::class);
 
-        $newStation = $request->validate([
+        $data = $request->validate([
             'name' => 'required|max:60',
         ]);
-        $newStation['owner_id'] = auth()->id();
+        $data['owner_id'] = auth()->id();
 
-        return Board::create($newStation);
+        return Board::create($data);
 
     }
 
@@ -82,4 +82,12 @@ class BoardController extends Controller
         Board::destroy($id);
         return  response(['message'=>'deleted']);
     }
+
+    public function taskList(Board $board)
+    {
+        $this->authorize('viewTasks',$board);
+
+        return Task::where('board_id', $board->id)->get();
+    }
+
 }

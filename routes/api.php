@@ -29,3 +29,5 @@ Route::get('/login', 'LoginController@login')->name('login');
 Route::middleware('auth:sanctum')->post('/logout', 'LoginController@logout')->name('logout');
 
 Route::middleware('auth:sanctum')->apiResource('board', 'BoardController');
+Route::middleware('auth:sanctum')->apiResource('task', 'TaskController')->except('index');
+Route::middleware('auth:sanctum')->get('board/{board}/tasks', 'TaskController@taskList');
