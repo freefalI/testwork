@@ -85,7 +85,7 @@ class TaskController extends Controller
     }
     public function attachImage(Request $request, Task $task)
     {
-//        $this->authorize('attachImage',$task);
+        $this->authorize('attachImage',$task);
         $this->validate($request,[
             'image' => 'image|mimes:jpeg,bmp,png|max:2000',
         ]);

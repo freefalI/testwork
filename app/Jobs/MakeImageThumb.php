@@ -9,6 +9,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Intervention\Image\Facades\Image;
 
 class MakeImageThumb implements ShouldQueue
 {
@@ -21,9 +22,21 @@ class MakeImageThumb implements ShouldQueue
      */
     public function __construct(Task $task, ImageAttachment $imageAttachment)
     {
-        $path = $imageAttachment->image;
-        $imageAttachment->thumb_mobile = '123';
-        $imageAttachment->thumb_desktop = '123';
+        $path = storage_path() . '/app/' . $imageAttachment->image;
+        $pathinfo = pathinfo($path);
+
+        $img = Image::make($path);
+        $img->crop(30, 30);
+        $newName = $pathinfo['dirname'] . '/' . $pathinfo['filename'] . '-mobile.' . $pathinfo['extension'];
+        $img->save($newName);
+        $imageAttachment->thumb_mobile = $newName;
+
+        $img = Image::make($path);
+        $img->crop(100, 100);
+        $newName = $pathinfo['dirname'] . '/' . $pathinfo['filename'] . '-desktop.' . $pathinfo['extension'];
+        $img->save($newName);
+        $imageAttachment->thumb_desktop = $newName;
+
         $imageAttachment->save();
     }
 
