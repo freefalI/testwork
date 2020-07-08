@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Board;
 use App\Station;
+use App\Task;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -83,11 +84,22 @@ class BoardController extends Controller
         return  response(['message'=>'deleted']);
     }
 
-    public function taskList(Board $board)
+    public function taskList(Request $request, Board $board)
     {
-        $this->authorize('viewTasks',$board);
-
-        return Task::where('board_id', $board->id)->get();
+        $this->authorize('viewTasks', $board);
+        $query = Task::where('board_id', $board->id);
+        //label id
+        if ($request->has('label')) {
+            $label = $request->get('label');
+            $query = $query->whereHas('labels', function ($q) use ($label) {
+                $q->where('label_id', $label);
+            });
+        }
+        //status id
+        if ($request->has('status')) {
+            $query = $query->where('status_id', $request->get('status'));
+        }
+        return $query->get();
     }
 
 }
