@@ -15,8 +15,8 @@ class CreateLabelTaskTable extends Migration
     {
         Schema::create('label_task', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('label_id');
-            $table->unsignedBigInteger('task_id');
+            $table->foreignId('label_id')->constrained();
+            $table->foreignId('task_id')->constrained();
             $table->timestamps();
         });
     }

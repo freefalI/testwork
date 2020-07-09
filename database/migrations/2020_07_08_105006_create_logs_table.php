@@ -15,7 +15,7 @@ class CreateLogsTable extends Migration
     {
         Schema::connection('mongodb')->create('logs', function (Blueprint $table) {
             $table->index('id');
-            $table->unsignedBigInteger('user_id');
+            $table->foreignId('user_id')->constrained();
             $table->string('action');
             $table->string('changes');
             $table->timestamps();

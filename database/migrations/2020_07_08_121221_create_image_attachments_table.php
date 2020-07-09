@@ -16,8 +16,8 @@ class CreateImageAttachmentsTable extends Migration
         Schema::create('image_attachments', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->unsignedBigInteger('task_id');
-            $table->unsignedBigInteger('user_id');
+            $table->foreignId('task_id')->constrained();
+            $table->foreignId('user_id')->constrained();
             $table->string('image');
             $table->string('thumb_mobile')->nullable();
             $table->string('thumb_desktop')->nullable();

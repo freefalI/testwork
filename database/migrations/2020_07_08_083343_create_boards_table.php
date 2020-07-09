@@ -17,7 +17,7 @@ class CreateBoardsTable extends Migration
             $table->id();
             $table->timestamps();
             $table->string('name');
-            $table->unsignedBigInteger('owner_id');
+            $table->foreignId('owner_id')->constrained('users');
         });
     }
 
