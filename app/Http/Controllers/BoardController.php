@@ -31,7 +31,10 @@ class BoardController extends Controller
         $this->authorize('create',Board::class);
 
         $data = $request->validate([
-            'name' => 'required|max:60',
+            'name' => [
+                'required',
+                'max:60'
+            ],
         ]);
         $data['owner_id'] = auth()->id();
 

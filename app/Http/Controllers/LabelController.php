@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Label;
-use App\Task;
 use Illuminate\Http\Request;
 
 class LabelController extends Controller
@@ -29,7 +28,10 @@ class LabelController extends Controller
         $this->authorize('create',Label::class);
 
         $data = $request->validate([
-            'title' => 'required|max:60',
+            'title' => [
+                'required',
+                'max:60'
+            ]
         ]);
 
         return Label::create($data);

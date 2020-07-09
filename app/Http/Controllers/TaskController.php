@@ -24,9 +24,18 @@ class TaskController extends Controller
         $this->authorize('create', Task::class);
 
         $data = $request->validate([
-            'title' => 'required|max:60',
-            'status_id' => 'required|numeric',
-            'board_id' => 'required|numeric',
+            'title' => [
+                'required',
+                'max:60'
+            ],
+            'status_id' => [
+                'required',
+                'numeric'
+            ],
+            'board_id' => [
+                'required',
+                'numeric'
+            ],
         ]);
 
         return Task::create($data);
@@ -89,7 +98,11 @@ class TaskController extends Controller
     {
         $this->authorize('attachImage', $task);
         $this->validate($request, [
-            'image' => 'image|mimes:jpeg,bmp,png|max:2000',
+            'image' => [
+                'image',
+                'mimes:jpeg,bmp,png',
+                'max:2000'
+            ]
         ]);
         $path = $request->file('image')->store('public');
         $imageAttachment = ImageAttachment::create([
