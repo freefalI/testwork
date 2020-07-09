@@ -26,16 +26,19 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::post('/register', 'RegisterController@register')->name('register');
 Route::get('/login', 'LoginController@login')->name('login');
-Route::middleware('auth:sanctum')->post('/logout', 'LoginController@logout')->name('logout');
 
-Route::middleware('auth:sanctum')->apiResource('board', 'BoardController');
-Route::middleware('auth:sanctum')->apiResource('task', 'TaskController')->except('index');
-Route::middleware('auth:sanctum')->get('board/{board}/tasks', 'BoardController@taskList');
+Route::middleware('auth:sanctum')->group(function () {
 
-Route::middleware('auth:sanctum')->apiResource('label', 'LabelController');
-Route::middleware('auth:sanctum')->post('task/{task}/attach_label/{label}/', 'TaskController@attachLabel');
+    Route::post('/logout', 'LoginController@logout')->name('logout');
 
-Route::middleware('auth:sanctum')->apiResource('status', 'StatusController');
+    Route::apiResource('board', 'BoardController');
+    Route::apiResource('task', 'TaskController')->except('index');
+    Route::get('board/{board}/tasks', 'BoardController@taskList');
+    Route::apiResource('label', 'LabelController');
+    Route::post('task/{task}/attach_label/{label}/', 'TaskController@attachLabel');
+    Route::apiResource('status', 'StatusController');
+    Route::post('task/{task}/attach_image/', 'TaskController@attachImage');
 
-Route::middleware('auth:sanctum')->post('task/{task}/attach_image/', 'TaskController@attachImage');
+});
+
 
