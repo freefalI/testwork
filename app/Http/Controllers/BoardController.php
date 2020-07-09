@@ -45,12 +45,12 @@ class BoardController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param int $id
-     * @return \Illuminate\Http\Response
+     * @param Board $board
+     * @return Board
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function show($id)
+    public function show(Board $board)
     {
-        $board =Board::findOrFail($id);
         $this->authorize('view',$board);
 
         return $board;
@@ -60,12 +60,12 @@ class BoardController extends Controller
      * Update the specified resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @param int $id
+     * @param Board $board
      * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Board $board)
     {
-        $board = Board::findOrFail($id);
 
         $this->authorize('update',$board);
 
@@ -76,14 +76,15 @@ class BoardController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param int $id
+     * @param Board $board
      * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function destroy($id)
+    public function destroy(Board $board)
     {
-        $this->authorize('delete',Board::findOrFail($id));
+        $this->authorize('delete',$board);
 
-        Board::destroy($id);
+        $board->delete();
         return  response(['message'=>'deleted']);
     }
 

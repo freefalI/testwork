@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Board;
 use App\ImageAttachment;
 use App\Jobs\MakeImageThumb;
 use App\Label;
@@ -44,12 +43,12 @@ class TaskController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param int $id
-     * @return \Illuminate\Http\Response
+     * @param Task $task
+     * @return Task
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function show($id)
+    public function show(Task $task)
     {
-        $task = Task::findOrFail($id);
         $this->authorize('view', $task);
 
         return $task;
@@ -59,13 +58,12 @@ class TaskController extends Controller
      * Update the specified resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @param int $id
+     * @param Task $task
      * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Task $task)
     {
-        $task = Task::findOrFail($id);
-
         $this->authorize('update', $task);
 
         $task->update($request->all());
@@ -76,14 +74,14 @@ class TaskController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param int $id
+     * @param Task $task
      * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function destroy($id)
+    public function destroy(Task $task)
     {
-        $this->authorize('delete', Task::findOrFail($id));
-
-        Board::destroy($id);
+        $this->authorize('delete', $task);
+        $task->delete();
         return response(['message' => 'deleted']);
     }
 

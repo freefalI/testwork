@@ -10,7 +10,7 @@ class StatusController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Status[]|\Illuminate\Database\Eloquent\Collection
      */
     public function index()
     {
@@ -42,11 +42,11 @@ class StatusController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param \Illuminate\Http\Request $request
+     * @param Status $status
+     * @return void
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Status $status)
     {
         //
     }
@@ -54,10 +54,10 @@ class StatusController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param Status $status
+     * @return void
      */
-    public function destroy($id)
+    public function destroy(Status $status)
     {
     }
 }

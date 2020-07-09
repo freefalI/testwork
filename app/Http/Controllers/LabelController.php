@@ -10,7 +10,7 @@ class LabelController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Label[]|\Illuminate\Database\Eloquent\Collection
      */
     public function index()
     {
@@ -40,12 +40,12 @@ class LabelController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param Label $label
+     * @return Label
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function show($id)
+    public function show(Label $label)
     {
-        $label =Label::findOrFail($id);
         $this->authorize('view',$label);
 
         return $label;
@@ -54,32 +54,31 @@ class LabelController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param Label $label
      * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Label $label)
     {
-        $label = Label::findOrFail($id);
-
         $this->authorize('update',$label);
 
         $label->update($request->all());
         return  response(['message'=>'updated']);
-
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param Label $label
      * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function destroy($id)
+    public function destroy(Label $label)
     {
-        $this->authorize('delete',Label::findOrFail($id));
+        $this->authorize('delete',$label);
 
-        Label::destroy($id);
+        $label->delete();
         return  response(['message'=>'deleted']);
     }
 }
