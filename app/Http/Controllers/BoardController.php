@@ -109,7 +109,7 @@ class BoardController extends Controller
         if ($request->has('status')) {
             $query = $query->where('status_id', $request->get('status'));
         }
-        return TaskResource::collection($query->get()->paginate(10));
+        return TaskResource::collection($query->paginate(10));
     }
 
 }
