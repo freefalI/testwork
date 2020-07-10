@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreLabel;
 use App\Http\Resources\LabelResource;
 use App\Label;
 use Illuminate\Http\Request;
@@ -24,18 +25,10 @@ class LabelController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return LabelResource
      */
-    public function store(Request $request)
+    public function store(StoreLabel $request)
     {
         $this->authorize('create',Label::class);
-
-        $data = $request->validate([
-            'title' => [
-                'required',
-                'max:60'
-            ]
-        ]);
-
-        return LabelResource::make(Label::create($data));
+        return LabelResource::make(Label::create($request->validated()));
     }
 
     /**

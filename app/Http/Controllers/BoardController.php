@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Board;
+use App\Http\Requests\StoreBoard;
 use App\Http\Resources\BoardResource;
 use App\Http\Resources\TaskResource;
 use App\Task;
@@ -27,16 +28,11 @@ class BoardController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return BoardResource
      */
-    public function store(Request $request)
+    public function store(StoreBoard $request)
     {
         $this->authorize('create',Board::class);
 
-        $data = $request->validate([
-            'name' => [
-                'required',
-                'max:60'
-            ],
-        ]);
+        $data = $request->validated();
         $data['owner_id'] = auth()->id();
 
         return new BoardResource(Board::create($data));

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreTask;
 use App\Http\Resources\TaskResource;
 use App\ImageAttachment;
 use App\Jobs\MakeImageThumb;
@@ -19,26 +20,10 @@ class TaskController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return TaskResource
      */
-    public function store(Request $request)
+    public function store(StoreTask $request)
     {
         $this->authorize('create', Task::class);
-
-        $data = $request->validate([
-            'title' => [
-                'required',
-                'max:60'
-            ],
-            'status_id' => [
-                'required',
-                'numeric'
-            ],
-            'board_id' => [
-                'required',
-                'numeric'
-            ],
-        ]);
-
-        return TaskResource::make(Task::create($data));
+        return TaskResource::make(Task::create($request->validated()));
     }
 
     /**
