@@ -96,11 +96,10 @@ class TaskController extends Controller
     {
         $this->authorize('attachLabel', $task);
         $label->tasks()->attach($task->id);
-        return TaskResource::make($task)
+        return TaskResource::make($task->load('labels'))
             ->additional(['meta' => [
                 'message' => 'attached',
             ]]);
-        //TODO load labels
     }
 
     public function attachImage(Request $request, Task $task)
