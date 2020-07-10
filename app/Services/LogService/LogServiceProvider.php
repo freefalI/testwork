@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Providers;
+namespace App\Services\LogService;
 
-use App\Services\DatabaseLogger;
-use App\Services\Logger;
+use App\Services\LogService\DatabaseLogger;
+use App\Services\LogService\Logger;
 use Illuminate\Support\ServiceProvider;
 
-class AppServiceProvider extends ServiceProvider
+class LogServiceProvider extends ServiceProvider
 {
     /**
      * Register any application services.
@@ -15,7 +15,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-
+        $this->app->bind(
+            Logger::class,
+            DatabaseLogger::class
+        );
     }
 
     /**

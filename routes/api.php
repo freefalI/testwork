@@ -1,5 +1,7 @@
 <?php
 
+use App\Services\LogService\DatabaseLogger;
+use App\Services\LogService\Logger;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -40,5 +42,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('task/{task}/attach_image/', 'TaskController@attachImage');
 
 });
+
+    Route::post('log',function (Logger $logger){
+        return $logger->log(now());
+    });
 
 
