@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\StatusCollection;
 use App\Status;
 use Illuminate\Http\Request;
 
@@ -10,11 +11,11 @@ class StatusController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return Status[]|\Illuminate\Database\Eloquent\Collection
+     * @return StatusCollection
      */
     public function index()
     {
-        return  Status::all();
+        return  StatusCollection::make(Status::all());
     }
 
     /**

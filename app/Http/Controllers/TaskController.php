@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\TaskResource;
 use App\ImageAttachment;
 use App\Jobs\MakeImageThumb;
 use App\Label;
@@ -16,7 +17,7 @@ class TaskController extends Controller
      * Store a newly created resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
+     * @return TaskResource
      */
     public function store(Request $request)
     {
@@ -37,21 +38,21 @@ class TaskController extends Controller
             ],
         ]);
 
-        return Task::create($data);
+        return TaskResource::make(Task::create($data));
     }
 
     /**
      * Display the specified resource.
      *
      * @param Task $task
-     * @return Task
+     * @return TaskResource
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function show(Task $task)
     {
         $this->authorize('view', $task);
 
-        return $task;
+        return TaskResource::make($task);
     }
 
     /**
@@ -59,7 +60,7 @@ class TaskController extends Controller
      *
      * @param \Illuminate\Http\Request $request
      * @param Task $task
-     * @return \Illuminate\Http\Response
+     * @return TaskResource
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function update(Request $request, Task $task)
@@ -67,29 +68,39 @@ class TaskController extends Controller
         $this->authorize('update', $task);
 
         $task->update($request->all());
-        return response(['message' => 'updated']);
 
+        return TaskResource::make($task)
+            ->additional(['meta' => [
+                'message' => 'updated',
+            ]]);
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param Task $task
-     * @return \Illuminate\Http\Response
+     * @return TaskResource
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function destroy(Task $task)
     {
         $this->authorize('delete', $task);
         $task->delete();
-        return response(['message' => 'deleted']);
+        return TaskResource::make($task)
+            ->additional(['meta' => [
+                'message' => 'deleted',
+            ]]);
     }
 
     public function attachLabel(Task $task, Label $label)
     {
         $this->authorize('attachLabel', $task);
         $label->tasks()->attach($task->id);
-        return response(['message' => 'attached']);
+        return TaskResource::make($task)
+            ->additional(['meta' => [
+                'message' => 'attached',
+            ]]);
+        //TODO load labels
     }
 
     public function attachImage(Request $request, Task $task)
@@ -109,6 +120,9 @@ class TaskController extends Controller
             'user_id' => Auth::user()->id
         ]);
         MakeImageThumb::dispatch($task, $imageAttachment);
-        return response(['message' => 'attached']);
+        return TaskResource::make($task)
+            ->additional(['meta' => [
+                'message' => 'attached',
+            ]]);
     }
 }

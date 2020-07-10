@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\LabelResource;
 use App\Label;
 use Illuminate\Http\Request;
 
@@ -10,18 +11,18 @@ class LabelController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return Label[]|\Illuminate\Database\Eloquent\Collection
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
     public function index()
     {
-        return  Label::all();
+        return  LabelResource::collection(Label::all());
     }
 
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return LabelResource
      */
     public function store(Request $request)
     {
@@ -34,21 +35,21 @@ class LabelController extends Controller
             ]
         ]);
 
-        return Label::create($data);
+        return LabelResource::make(Label::create($data));
     }
 
     /**
      * Display the specified resource.
      *
      * @param Label $label
-     * @return Label
+     * @return LabelResource
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function show(Label $label)
     {
         $this->authorize('view',$label);
 
-        return $label;
+        return  LabelResource::make($label);
     }
 
     /**
@@ -56,7 +57,7 @@ class LabelController extends Controller
      *
      * @param \Illuminate\Http\Request $request
      * @param Label $label
-     * @return \Illuminate\Http\Response
+     * @return LabelResource
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function update(Request $request, Label $label)
@@ -64,14 +65,18 @@ class LabelController extends Controller
         $this->authorize('update',$label);
 
         $label->update($request->all());
-        return  response(['message'=>'updated']);
+        return LabelResource::make($label)
+            ->additional(['meta' => [
+                'message' => 'updated',
+            ]]);
+
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param Label $label
-     * @return \Illuminate\Http\Response
+     * @return LabelResource
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function destroy(Label $label)
@@ -79,6 +84,10 @@ class LabelController extends Controller
         $this->authorize('delete',$label);
 
         $label->delete();
-        return  response(['message'=>'deleted']);
+        return LabelResource::make($label)
+            ->additional(['meta' => [
+                'message' => 'deleted',
+            ]]);
+
     }
 }

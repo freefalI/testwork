@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Board;
-use App\Http\Resources\Task as TaskResource;
+use App\Http\Resources\BoardResource;
+use App\Http\Resources\TaskResource;
 use App\Task;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -13,18 +14,18 @@ class BoardController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
     public function index()
     {
-        return Board::where('owner_id', Auth::user()->id)->get();
+        return BoardResource::collection(Board::where('owner_id', Auth::user()->id)->get());
     }
 
     /**
      * Store a newly created resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
+     * @return BoardResource
      */
     public function store(Request $request)
     {
@@ -38,22 +39,21 @@ class BoardController extends Controller
         ]);
         $data['owner_id'] = auth()->id();
 
-        return Board::create($data);
-
+        return new BoardResource(Board::create($data));
     }
 
     /**
      * Display the specified resource.
      *
      * @param Board $board
-     * @return Board
+     * @return BoardResource
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function show(Board $board)
     {
         $this->authorize('view',$board);
 
-        return $board;
+        return new BoardResource($board);
     }
 
     /**
@@ -61,31 +61,37 @@ class BoardController extends Controller
      *
      * @param \Illuminate\Http\Request $request
      * @param Board $board
-     * @return \Illuminate\Http\Response
+     * @return BoardResource
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function update(Request $request, Board $board)
     {
 
-        $this->authorize('update',$board);
+        $this->authorize('update', $board);
 
         $board->update($request->all());
-        return  response(['message'=>'updated']);
+        return BoardResource::make($board)
+            ->additional(['meta' => [
+                'message' => 'updated',
+            ]]);
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param Board $board
-     * @return \Illuminate\Http\Response
+     * @return BoardResource
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function destroy(Board $board)
     {
-        $this->authorize('delete',$board);
+        $this->authorize('delete', $board);
 
         $board->delete();
-        return  response(['message'=>'deleted']);
+        return BoardResource::make($board)
+            ->additional(['meta' => [
+                'message' => 'deleted',
+            ]]);
     }
 
     public function taskList(Request $request, Board $board)
