@@ -2,8 +2,8 @@
 
 namespace App\Policies;
 
-use App\Task;
-use App\User;
+use App\Models\Task;
+use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class LabelPolicy

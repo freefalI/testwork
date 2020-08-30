@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Board;
+use App\Models\Board;
 use App\Http\Requests\Board\Store;
 use App\Http\Requests\Board\Update;
 use App\Http\Resources\BoardResource;

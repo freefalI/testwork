@@ -1,10 +1,10 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
 class Board extends Model
 {
-    protected $fillable = ['name','owner_id'];
+    protected $fillable = ['name', 'owner_id'];
 }

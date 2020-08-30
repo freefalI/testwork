@@ -2,8 +2,8 @@
 
 namespace App\Http\Resources;
 
-use App\Board;
-use App\Status;
+use App\Models\Board;
+use App\Models\Status;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class TaskResource extends JsonResource

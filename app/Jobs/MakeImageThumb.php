@@ -2,8 +2,8 @@
 
 namespace App\Jobs;
 
-use App\ImageAttachment;
-use App\Task;
+use App\Models\ImageAttachment;
+use App\Models\Task;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;

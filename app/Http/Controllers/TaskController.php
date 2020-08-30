@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Board;
+use App\Models\Board;
 use App\Http\Requests\Task\AttachImage;
 use App\Http\Requests\Task\Store;
 use App\Http\Requests\Task\Update;
 use App\Http\Resources\TaskResource;
-use App\ImageAttachment;
+use App\Models\ImageAttachment;
 use App\Jobs\MakeImageThumb;
-use App\Label;
-use App\Task;
+use App\Models\Label;
+use App\Models\Task;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 

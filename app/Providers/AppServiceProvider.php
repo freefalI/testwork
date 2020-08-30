@@ -3,7 +3,7 @@
 namespace App\Providers;
 
 use App\Observers\TaskObserver;
-use App\Task;
+use App\Models\Task;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider

@@ -41,7 +41,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('statuses', 'StatusController');
 
     Route::post('log',function (){
-        return \App\Log::all();
+        return \App\Models\Log::all();
     });
 });
 
