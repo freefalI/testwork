@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Board;
 use App\Http\Requests\Board\Store;
 use App\Http\Requests\Board\Update;
-use App\Http\Resources\BoardResource;
-use Illuminate\Support\Facades\Auth;
+use App\Http\Resources\Board\BoardResource;
+use App\Models\Board;
 
 class BoardController extends Controller
 {
@@ -17,7 +16,11 @@ class BoardController extends Controller
      */
     public function index()
     {
-        return BoardResource::collection(Board::where('owner_id', Auth::user()->id)->get());
+        return BoardResource::collection(
+            Board::query()
+                ->where('owner_id', auth()->user()->id)
+                ->paginate(request('per_page', 15))
+        );
     }
 
     /**

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 
 class LoginController extends Controller
 {
@@ -29,6 +30,7 @@ class LoginController extends Controller
     public function logout()
     {
         Auth::user()->tokens()->delete();
+
         return ['message' => 'logout complete'];
     }
 }

@@ -6,7 +6,7 @@ use App\Models\Board;
 use App\Http\Requests\Task\AttachImage;
 use App\Http\Requests\Task\Store;
 use App\Http\Requests\Task\Update;
-use App\Http\Resources\TaskResource;
+use App\Http\Resources\Task\TaskResource;
 use App\Models\ImageAttachment;
 use App\Jobs\MakeImageThumb;
 use App\Models\Label;
@@ -17,10 +17,11 @@ use Illuminate\Support\Facades\Auth;
 class TaskController extends Controller
 {
 
-    public function list(Request $request, Board $board)
+    public function index(Request $request, Board $board)
     {
-        $this->authorize('viewTasks', $board);
-        $query = Task::where('board_id', $board->id);
+        $this->authorize('view', $board);
+        $query = Task::where('board_id', $board->id)->with(['status']);
+
         //label id
         if ($request->has('label')) {
             $label = $request->get('label');
@@ -32,7 +33,8 @@ class TaskController extends Controller
         if ($request->has('status')) {
             $query = $query->where('status_id', $request->get('status'));
         }
-        return TaskResource::collection($query->paginate(10));
+
+        return TaskResource::collection($query->paginate(request('per_page',10)));
     }
 
     /**
@@ -60,7 +62,7 @@ class TaskController extends Controller
     {
         $this->authorize('view', $task);
 
-        return TaskResource::make($task);
+        return TaskResource::make($task->load(['status','board']));
     }
 
     /**
@@ -77,7 +79,7 @@ class TaskController extends Controller
 
         $task->update($request->all());
 
-        return TaskResource::make($task)
+        return TaskResource::make($task->load(['status']))
             ->additional(['meta' => [
                 'message' => 'updated',
             ]]);

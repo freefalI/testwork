@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\StatusCollection;
+use App\Http\Resources\Status\StatusResource;
 use App\Models\Status;
 use Illuminate\Http\Request;
 
@@ -11,11 +11,11 @@ class StatusController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return StatusCollection
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
     public function index()
     {
-        return  StatusCollection::make(Status::all());
+        return  StatusResource::collection(Status::all());
     }
 
     /**

@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Resources;
+namespace App\Http\Resources\Task;
 
-use App\Models\Board;
-use App\Models\Status;
+use App\Http\Resources\Board\BoardResource;
+use App\Http\Resources\Status\StatusResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class TaskResource extends JsonResource
@@ -19,8 +19,10 @@ class TaskResource extends JsonResource
         return [
             'id' => $this->id,
             'title' => $this->title,
-            'status' => StatusResource::make(Status::find($this->status_id)),
-            'board' => BoardResource::make(Board::find($this->board_id)),
+            'status' => new StatusResource($this->whenLoaded('status')),
+            'board' => new BoardResource($this->whenLoaded('board')),
+            'status_id' => $this->status_id,
+            'board_id' => $this->board_id,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

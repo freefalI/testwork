@@ -29,7 +29,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::apiResource('boards', 'BoardController');
 
-    Route::get('boards/{board}/tasks', 'TaskController@list');
+    Route::get('boards/{board}/tasks', 'TaskController@index');
 
     Route::apiResource('tasks', 'TaskController')->except('index');
 

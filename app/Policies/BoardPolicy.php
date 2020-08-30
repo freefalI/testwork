@@ -35,9 +35,4 @@ class BoardPolicy
         return $user->id == $board->owner_id;
     }
 
-    public function viewTasks(User $user, Board $board)
-    {
-        return $user->id == $board->owner_id;
-    }
-
 }
