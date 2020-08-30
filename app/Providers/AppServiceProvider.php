@@ -2,8 +2,8 @@
 
 namespace App\Providers;
 
-use App\Services\DatabaseLogger;
-use App\Services\Logger;
+use App\Observers\TaskObserver;
+use App\Task;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -25,6 +25,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        Task::observe(TaskObserver::class);
     }
 }
