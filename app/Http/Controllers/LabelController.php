@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreLabel;
+use App\Http\Requests\Label\Store;
+use App\Http\Requests\Label\Update;
 use App\Http\Resources\LabelResource;
 use App\Label;
-use Illuminate\Http\Request;
 
 class LabelController extends Controller
 {
@@ -22,10 +22,10 @@ class LabelController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Store  $request
      * @return LabelResource
      */
-    public function store(StoreLabel $request)
+    public function store(Store $request)
     {
         $this->authorize('create',Label::class);
         return LabelResource::make(Label::create($request->validated()));
@@ -48,12 +48,12 @@ class LabelController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param Update $request
      * @param Label $label
      * @return LabelResource
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function update(Request $request, Label $label)
+    public function update(Update $request, Label $label)
     {
         $this->authorize('update',$label);
 

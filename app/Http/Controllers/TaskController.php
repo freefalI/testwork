@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreTask;
+use App\Board;
+use App\Http\Requests\Task\AttachImage;
+use App\Http\Requests\Task\Store;
+use App\Http\Requests\Task\Update;
 use App\Http\Resources\TaskResource;
 use App\ImageAttachment;
 use App\Jobs\MakeImageThumb;
@@ -14,13 +17,33 @@ use Illuminate\Support\Facades\Auth;
 class TaskController extends Controller
 {
 
+    public function list(Request $request, Board $board)
+    {
+        $this->authorize('viewTasks', $board);
+        $query = Task::where('board_id', $board->id);
+        //label id
+        if ($request->has('label')) {
+            $label = $request->get('label');
+            $query = $query->whereHas('labels', function ($q) use ($label) {
+                $q->where('label_id', $label);
+            });
+        }
+        //status id
+        if ($request->has('status')) {
+            $query = $query->where('status_id', $request->get('status'));
+        }
+        return TaskResource::collection($query->paginate(10));
+    }
+
     /**
      * Store a newly created resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param Store $request
+     * @param Board $board
      * @return TaskResource
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function store(StoreTask $request)
+    public function store(Store $request, Board $board)
     {
         $this->authorize('create', Task::class);
         return TaskResource::make(Task::create($request->validated()));
@@ -43,12 +66,12 @@ class TaskController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param Update $request
      * @param Task $task
      * @return TaskResource
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function update(Request $request, Task $task)
+    public function update(Update $request, Task $task)
     {
         $this->authorize('update', $task);
 
@@ -87,16 +110,10 @@ class TaskController extends Controller
             ]]);
     }
 
-    public function attachImage(Request $request, Task $task)
+    public function attachImage(AttachImage $request, Task $task)
     {
         $this->authorize('attachImage', $task);
-        $this->validate($request, [
-            'image' => [
-                'image',
-                'mimes:jpeg,bmp,png',
-                'max:2000'
-            ]
-        ]);
+
         $path = $request->file('image')->store('public');
         $imageAttachment = ImageAttachment::create([
             'task_id' => $task->id,

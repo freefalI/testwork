@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Task;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreLabel extends FormRequest
+class AttachImage extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,9 +24,11 @@ class StoreLabel extends FormRequest
     public function rules()
     {
         return [
-            'title' => [
+            'image' => [
                 'required',
-                'max:60'
+                'image',
+                'mimes:jpeg,bmp,png',
+                'max:2000'
             ]
         ];
     }

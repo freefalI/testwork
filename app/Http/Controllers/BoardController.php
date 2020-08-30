@@ -3,11 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Board;
-use App\Http\Requests\StoreBoard;
+use App\Http\Requests\Board\Store;
+use App\Http\Requests\Board\Update;
 use App\Http\Resources\BoardResource;
-use App\Http\Resources\TaskResource;
-use App\Task;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class BoardController extends Controller
@@ -25,12 +23,12 @@ class BoardController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param Store $request
      * @return BoardResource
      */
-    public function store(StoreBoard $request)
+    public function store(Store $request)
     {
-        $this->authorize('create',Board::class);
+        $this->authorize('create', Board::class);
 
         $data = $request->validated();
         $data['owner_id'] = auth()->id();
@@ -55,17 +53,17 @@ class BoardController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param Update $request
      * @param Board $board
      * @return BoardResource
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function update(Request $request, Board $board)
+    public function update(Update $request, Board $board)
     {
 
         $this->authorize('update', $board);
-
         $board->update($request->all());
+
         return BoardResource::make($board)
             ->additional(['meta' => [
                 'message' => 'updated',
@@ -90,22 +88,5 @@ class BoardController extends Controller
             ]]);
     }
 
-    public function taskList(Request $request, Board $board)
-    {
-        $this->authorize('viewTasks', $board);
-        $query = Task::where('board_id', $board->id);
-        //label id
-        if ($request->has('label')) {
-            $label = $request->get('label');
-            $query = $query->whereHas('labels', function ($q) use ($label) {
-                $q->where('label_id', $label);
-            });
-        }
-        //status id
-        if ($request->has('status')) {
-            $query = $query->where('status_id', $request->get('status'));
-        }
-        return TaskResource::collection($query->paginate(10));
-    }
 
 }
