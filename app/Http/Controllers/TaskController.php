@@ -20,7 +20,7 @@ class TaskController extends Controller
     public function index(Request $request, Board $board)
     {
         $this->authorize('view', $board);
-        $query = Task::where('board_id', $board->id)->with(['status']);
+        $query = $board->tasks()->with(['status']);
 
         //label id
         if ($request->has('label')) {

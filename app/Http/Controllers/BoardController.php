@@ -17,8 +17,7 @@ class BoardController extends Controller
     public function index()
     {
         return BoardResource::collection(
-            Board::query()
-                ->where('owner_id', auth()->user()->id)
+            auth()->user()->boards()
                 ->paginate(request('per_page', 15))
         );
     }
