@@ -32,7 +32,7 @@ class TaskPolicy
 
     public function update(User $user, Task $task)
     {
-        return $user->id == $task->board>owner_id;
+        return $user->id == $task->board->owner_id;
     }
 
     public function delete(User $user, Task $task)
