@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateLogsTable extends Migration
+class CreateStatusesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,9 @@ class CreateLogsTable extends Migration
      */
     public function up()
     {
-        Schema::connection('mongodb')->drop('logs');
-        Schema::connection('mongodb')-> create('logs', function (Blueprint $table) {
-            $table->index('id');
-            $table->foreignId('user_id')->constrained();
-            $table->string('action');
-            $table->string('changes');
+        Schema::create('statuses', function (Blueprint $table) {
+            $table->id();
             $table->timestamps();
-
         });
     }
 
@@ -31,6 +26,6 @@ class CreateLogsTable extends Migration
      */
     public function down()
     {
-        Schema::connection('mongodb')->drop('logs');
+        Schema::dropIfExists('statuses');
     }
 }
